@@ -1,20 +1,22 @@
 FROM php:7.4.5-fpm
 
-ENV VERSION_MEMCACHED="3.1.4"
 ENV VERSION_MCRYPT="1.0.3"
-ENV VERSION_NEW_RELIC="newrelic-php5-9.10.1.263"
+ENV VERSION_MEMCACHED="3.1.4"
+ENV VERSION_NR="9.10.1.263"
 
 RUN set -x && DEBIAN_FRONTEND=noninteractive && \
   # newrelic agent
-  curl -fsSL https://download.newrelic.com/php_agent/release/${VERSION_NEW_RELIC}-linux.tar.gz | tar -C /tmp -zx && \
+  curl -fsSL \
+    https://download.newrelic.com/php_agent/archive/${VERSION_NR}/newrelic-php5-${VERSION_NR}-linux.tar.gz \
+    | tar -C /tmp -zx && \
   export NR_INSTALL_USE_CP_NOT_LN=1 && \
   export NR_INSTALL_SILENT=1 && \
   /tmp/newrelic-php5-*/newrelic-install install && \
   rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
   sed -i \
-      -e "s/newrelic.appname =.*/newrelic.appname = \${NEW_RELIC_APP_NAME}/" \
-      -e "s/newrelic.license =.*/newrelic.license = \${NEW_RELIC_LICENSE_KEY}/" \
-      /usr/local/etc/php/conf.d/newrelic.ini && \
+    -e "s/newrelic.appname =.*/newrelic.appname = \${NEW_RELIC_APP_NAME}/" \
+    -e "s/newrelic.license =.*/newrelic.license = \${NEW_RELIC_LICENSE_KEY}/" \
+    /usr/local/etc/php/conf.d/newrelic.ini && \
   # build tools
   apt-get update && \
   apt-get install -y autoconf gcc make pkg-config && \
