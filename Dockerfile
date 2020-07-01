@@ -2,7 +2,7 @@ FROM php:7.4.5-fpm
 
 ENV VERSION_MCRYPT="1.0.3"
 ENV VERSION_MEMCACHED="3.1.5"
-ENV VERSION_NR="9.10.1.263"
+ENV VERSION_NR="9.11.0.267"
 
 RUN set -x && DEBIAN_FRONTEND=noninteractive && \
   # newrelic agent
